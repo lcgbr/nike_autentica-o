@@ -31,7 +31,6 @@ Esta aplicação permite gerar relatórios de produtos com base em SKUs informad
 
 .
 ├── app.py
-├── admin.py
 ├── relatorio.py
 ├── utils.py
 ├── requirements.txt
@@ -41,26 +40,15 @@ Esta aplicação permite gerar relatórios de produtos com base em SKUs informad
 ├── templates/
 │   ├── login.html
 │   ├── form.html
-│   ├── admin_login.html
-│   └── admin_painel.html
 
 ---
 
 ## 🔐 Variáveis de ambiente
 
-### Arquivo `.env`
-SECRET_KEY=limaconsulting
-AUTHORIZED_USERS=dmangabeira@limaconsulting.com,eoliveira@limaconsulting.com
-DEFAULT_PASSWORD=hL3a6a4&
-ADMIN_USER=admin
-ADMIN_PASSWORD=lima@2025
+### Arquivo `.env`(rodar localmente)
+
 
 ### Arquivo `env.yaml` (para o Cloud Run)
-SECRET_KEY: limaconsulting
-AUTHORIZED_USERS: dmangabeira@limaconsulting.com,eoliveira@limaconsulting.com
-DEFAULT_PASSWORD: hL3a6a4&
-ADMIN_USER: admin
-ADMIN_PASSWORD: lima@2025
 GCP_PROJECT: crawlers-fisia
 GCP_PROJECT_ID: crawlers-fisia
 GOOGLE_CLOUD_PROJECT: crawlers-fisia
@@ -70,7 +58,6 @@ GOOGLE_CLOUD_PROJECT: crawlers-fisia
 ## 🔑 Login
 
 - **Usuários comuns**: via `/login`
-- **Admin**: via `/admin/login`
 
 ---
 
