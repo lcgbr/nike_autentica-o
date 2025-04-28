@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Produtos</title>
+    <style>
+        body { font-family: Arial, padding: 20px; max-width: 700px; margin: auto; }
+        input, select, textarea, button { padding: 10px; margin: 10px 0; width: 100%; box-sizing: border-box; }
+        button { background-color: #28a745; color: white; border: none; border-radius: 5px; }
+        button:hover { background-color: #218838; }
+    </style>
+</head>
+<body>
+    <h1>Relatório de Produtos</h1>
+    <p>Insira os SKUs abaixo ou envie um arquivo CSV. Depois, selecione o canal e clique em gerar relatório.</p>
+
+    <form method="POST" enctype="multipart/form-data">
+        <label>SKUs (separados por vírgula ou espaço):</label>
+        <textarea name="skus" rows="4" placeholder="Ex: ABC01-111, 123456-789"></textarea>
+
+        <label>Ou envie um arquivo CSV com SKUs (1ª coluna):</label>
+        <input type="file" name="arquivo">
+
+        <label>Canal de Venda:</label>
+        <select name="canal">
+            <option value="">Selecione</option>
+            <option value="Netshoes">Netshoes</option>
+            <option value="Geral Centauro 27.06">Geral Centauro 27.06</option>
+            <option value="Dafiti">Dafiti</option>
+            <option value="MELI">MELI</option>
+            <option value="studio78">studio78</option>
+        </select>
+
+        <label>Outro Canal:</label>
+        <input type="text" name="outro_canal" placeholder="Se o canal desejado não estiver acima">
+
+        <button type="submit">Gerar Relatório</button>
+    </form>
+
+    {% if mensagem %}
+        <p style="color: red;">{{ mensagem }}</p>
+    {% endif %}
+</body>
+</html>

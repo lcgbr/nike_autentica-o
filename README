@@ -1,0 +1,91 @@
+# Aplicação Flask - Relatório de Produtos
+
+Esta aplicação permite gerar relatórios de produtos com base em SKUs informados manualmente ou via CSV, e canal de venda selecionado. O sistema conta com autenticação de usuários e painel administrativo com login exclusivo.
+
+---
+
+## 🚀 Deploy (Cloud Run + Container Registry)
+
+### Pré-requisitos
+- Projeto GCP com Cloud Run e Artifact Registry ativados
+- Docker e gcloud CLI instalados
+
+### Passos
+
+1. **Build da imagem Docker**
+   docker build -t gcr.io/crawlers-fisia/relatorio-gateway .
+
+2. **Push da imagem para o Artifact/Container Registry**
+   docker push gcr.io/crawlers-fisia/relatorio-gateway
+
+3. **Deploy da imagem no Cloud Run**
+   gcloud run deploy relatorio-gateway \
+     --image gcr.io/crawlers-fisia/relatorio-gateway \
+     --region=us-central1 \
+     --allow-unauthenticated \
+     --env-vars-file=env.yaml
+
+---
+
+## 📁 Estrutura de arquivos
+
+.
+├── app.py
+├── admin.py
+├── relatorio.py
+├── utils.py
+├── requirements.txt
+├── Dockerfile
+├── .env
+├── env.yaml
+├── templates/
+│   ├── login.html
+│   ├── form.html
+│   ├── admin_login.html
+│   └── admin_painel.html
+
+---
+
+## 🔐 Variáveis de ambiente
+
+### Arquivo `.env`
+SECRET_KEY=limaconsulting
+AUTHORIZED_USERS=dmangabeira@limaconsulting.com,eoliveira@limaconsulting.com
+DEFAULT_PASSWORD=hL3a6a4&
+ADMIN_USER=admin
+ADMIN_PASSWORD=lima@2025
+
+### Arquivo `env.yaml` (para o Cloud Run)
+SECRET_KEY: limaconsulting
+AUTHORIZED_USERS: dmangabeira@limaconsulting.com,eoliveira@limaconsulting.com
+DEFAULT_PASSWORD: hL3a6a4&
+ADMIN_USER: admin
+ADMIN_PASSWORD: lima@2025
+GCP_PROJECT: crawlers-fisia
+GCP_PROJECT_ID: crawlers-fisia
+GOOGLE_CLOUD_PROJECT: crawlers-fisia
+
+---
+
+## 🔑 Login
+
+- **Usuários comuns**: via `/login`
+- **Admin**: via `/admin/login`
+
+---
+
+## 📤 Geração de Relatórios
+
+1. Acesse `/`
+2. Preencha os SKUs ou envie um CSV
+3. Selecione ou informe o canal
+4. Clique em **Gerar Relatório**
+
+---
+
+## 🛠️ Comandos úteis
+
+Reiniciar ambiente local:
+docker compose down
+docker build -t gcr.io/crawlers-fisia/relatorio-gateway .
+docker run -p 8080:8080 gcr.io/crawlers-fisia/relatorio-gateway
