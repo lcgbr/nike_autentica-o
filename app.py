@@ -7,15 +7,20 @@ from datetime import timedelta
 from relatorio import gerar_excel_precos
 from utils import parse_skus
 
-
 load_dotenv()
+
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "supersecret")
 app.permanent_session_lifetime = timedelta(minutes=30)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
-AUTHORIZED_USERS = os.environ.get("AUTHORIZED_USERS", "").split(",")
-DEFAULT_PASSWORD = os.environ.get("DEFAULT_PASSWORD", "1234")
+# >>> Mudança principal aqui
+AUTHORIZED_CREDENTIALS = {
+    user.split(":")[0]: user.split(":")[1]
+    for user in os.environ.get("AUTHORIZED_USERS", "").split(",")
+}
+
+DEFAULT_PASSWORD = os.environ.get("DEFAULT_PASSWORD", "1234")  # Pode remover se quiser
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -33,23 +38,11 @@ def index():
             return "⚠️ Escolha apenas uma opção de canal.", 400
 
         try:
-            skus_list = []
-            if arquivo:
-                if arquivo.filename.endswith(".csv"):
-                    df = pd.read_csv(arquivo)
-                elif arquivo.filename.endswith(".xlsx"):
-                    df = pd.read_excel(arquivo)
-                else:
-                    return "⚠️ Formato de arquivo não suportado.", 400
-
-                if not df.empty:
-                    primeira_coluna = df.columns[0]
-                    skus_list = df[primeira_coluna].dropna().astype(str).tolist()
+            if arquivo and arquivo.filename.endswith(".csv"):
+                df = pd.read_csv(arquivo)
+                skus_list = df.iloc[:, 0].tolist()
             else:
                 skus_list = parse_skus(skus_texto)
-
-            if not skus_list:
-                return "⚠️ Nenhum SKU foi fornecido.", 400
 
             output_path = gerar_excel_precos(skus_list, canal)
             return send_file(output_path, as_attachment=True)
@@ -63,7 +56,9 @@ def login():
     if request.method == "POST":
         email = request.form.get("email")
         senha = request.form.get("senha")
-        if email in AUTHORIZED_USERS and senha == DEFAULT_PASSWORD:
+
+        # >>> Nova lógica para validar email+senha
+        if email in AUTHORIZED_CREDENTIALS and senha == AUTHORIZED_CREDENTIALS[email]:
             session.permanent = True
             session["user"] = email
             return redirect("/")
