@@ -13,17 +13,17 @@ Esta aplicação permite gerar relatórios de produtos com base em SKUs informad
 ### Passos
 
 1. **Build da imagem Docker**
-   docker build -t gcr.io/crawlers-fisia/relatorio-gateway .
+   docker build -t us-central1-docker.pkg.dev/crawlers-fisia/relatorio-gateway/relatorio-gateway .
 
 2. **Push da imagem para o Artifact/Container Registry**
-   docker push gcr.io/crawlers-fisia/relatorio-gateway
+   docker push us-central1-docker.pkg.dev/crawlers-fisia/relatorio-gateway/relatorio-gateway
 
 3. **Deploy da imagem no Cloud Run**
    gcloud run deploy relatorio-gateway \
-     --image gcr.io/crawlers-fisia/relatorio-gateway \
-     --region=us-central1 \
-     --allow-unauthenticated \
-     --env-vars-file=env.yaml
+   --image us-central1-docker.pkg.dev/crawlers-fisia/relatorio-gateway/relatorio-gateway \
+   --region=us-central1 \
+   --allow-unauthenticated \
+   --env-vars-file=env.yaml
 
 ---
 
@@ -46,7 +46,6 @@ Esta aplicação permite gerar relatórios de produtos com base em SKUs informad
 ## 🔐 Variáveis de ambiente
 
 ### Arquivo `.env`(rodar localmente)
-
 
 ### Arquivo `env.yaml` (para o Cloud Run)
 GCP_PROJECT: crawlers-fisia
@@ -74,5 +73,5 @@ GOOGLE_CLOUD_PROJECT: crawlers-fisia
 
 Reiniciar ambiente local:
 docker compose down
-docker build -t gcr.io/crawlers-fisia/relatorio-gateway .
-docker run -p 8080:8080 gcr.io/crawlers-fisia/relatorio-gateway
+docker build -t us-central1-docker.pkg.dev/crawlers-fisia/relatorio-gateway/relatorio-gateway .
+docker run -p 8080:8080 us-central1-docker.pkg.dev/crawlers-fisia/relatorio-gateway/relatorio-gateway
